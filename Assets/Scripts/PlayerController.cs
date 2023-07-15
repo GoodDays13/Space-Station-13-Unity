@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public Sprite frontSprite;
     public Sprite backSprite;
     public Sprite sideSprite;
+    public bool moveRight;
+    public bool moveLeft;
     private Transform sprite;
     private PlayerInput input;
     private Vector2Int move;
@@ -24,6 +26,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         var moveInputs = Vector2Int.RoundToInt(input.actions.FindAction("Move").ReadValue<Vector2>());
+        if (moveRight)
+            moveInputs = Vector2Int.right;
+        if (moveLeft)
+            moveInputs = Vector2Int.left;
         if (moveInputs == Vector2Int.zero)
             move = Vector2Int.zero;
         else if (sprite.localPosition.x == 0 || sprite.localPosition.y == 0) // currently moving horizontally
@@ -105,7 +111,7 @@ public class PlayerController : MonoBehaviour
         UpdateSprite(distance);
         
         transform.position += distance;
-            sprite.position -= distance;
+        sprite.position -= distance;
             
     }
 
