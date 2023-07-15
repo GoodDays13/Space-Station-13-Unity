@@ -105,7 +105,6 @@ public class PlayerController : MonoBehaviour
         UpdateSprite(distance);
         
         transform.position += distance;
-        if (sprite.localPosition == Vector3.zero)
             sprite.position -= distance;
             
     }
