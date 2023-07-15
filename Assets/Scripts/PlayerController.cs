@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public Sprite sideSprite;
     public bool moveRight;
     public bool moveLeft;
+    public bool walking;
     private Transform sprite;
     private PlayerInput input;
     private Vector2Int move;
@@ -55,7 +56,8 @@ public class PlayerController : MonoBehaviour
         // Moves the sprite closer to 0
         if (sprite.localPosition != Vector3.zero)
         {
-            var movement = -sprite.localPosition.normalized * (speed * Time.deltaTime);
+            var movement = -sprite.localPosition.normalized * speed * Time.deltaTime;
+            movement *= walking ? 0.5f : 1f;
             if (movement.magnitude > sprite.localPosition.magnitude)
             {
                 sprite.localPosition = Vector3.zero;
@@ -66,12 +68,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (sprite.localPosition == Vector3.zero) 
+        if (sprite.localPosition == Vector3.zero && move != Vector2Int.zero) 
         {
-            if (move != Vector2Int.zero)
-            {
-                Move(move);
-            }
+            walking = input.actions.FindAction("Walk").IsPressed();
+            Move(move);
         }
     }
 
