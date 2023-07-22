@@ -12,7 +12,7 @@ public abstract class Clickable : MonoBehaviour
         foreach (GameObject player in players)
         {
             PlayerInput input = player.GetComponent<PlayerInput>();
-            if (input && input.playerIndex == 0)
+            if (input && input.playerIndex == 0 && (player.transform.position - transform.position).magnitude <= 1)
                 WhenClicked(player);
         }
     }

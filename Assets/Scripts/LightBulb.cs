@@ -8,6 +8,7 @@ public class LightBulb : Clickable
 {
     public Sprite noBulb;
     public Sprite bulb;
+    public GameObject bulbItem;
 
     public enum State
     {
@@ -43,12 +44,23 @@ public class LightBulb : Clickable
 
     public override void WhenClicked(GameObject player)
     {
-        if ((player.transform.position - transform.position).magnitude > 1)
+        var inv = player.GetComponent<Inventory>();
+        if (!inv)
             return;
-        if (state == State.NoBulb)
+        //playerHasBulb = (inv.activeHandRight && inv.rightHand != null && inv.rightHand.displayName == "Light Bulb") ||
+        //    (!inv.activeHandRight && inv.leftHand != null && inv.leftHand.displayName == "Light Bulb");
+        Item activeHand = inv.activeHandRight ? inv.rightHand : inv.leftHand;
+
+        if (state == State.NoBulb && activeHand != null && activeHand.displayName == "Light Bulb")
+        {
             state = State.HasBulb;
-        else
+            Destroy(inv.RemoveInHand(inv.activeHandRight).gameObject);
+        }
+        else if (state == State.HasBulb && activeHand == null)
+        {
             state = State.NoBulb;
+            inv.PutInHand(Instantiate(bulbItem, player.transform.position, Quaternion.identity), inv.activeHandRight);
+        }
 
     }
 }
