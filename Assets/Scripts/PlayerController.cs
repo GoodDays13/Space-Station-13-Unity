@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 using static UnityEngine.UI.Image;
 
 public class PlayerController : MonoBehaviour
@@ -59,8 +60,8 @@ public class PlayerController : MonoBehaviour
                 while (!movement[lastPressedIndex])
                     lastPressedIndex--;
 
-            pressedCount--;
             }
+            pressedCount--;
         }
 
         if (pressedCount == 1)
@@ -146,10 +147,14 @@ public class PlayerController : MonoBehaviour
             return;
         }
         UpdateSprite(distance);
-        
-        transform.position += distance;
-        sprite.position -= distance;
-            
+
+        Tilemap tilemap = GameObject.FindGameObjectWithTag("Floor").GetComponent<Tilemap>();
+        Vector3Int cell = tilemap.WorldToCell(transform.position + distance);
+        Vector3 target = tilemap.CellToWorld(cell);
+        target.z = 0;
+        var temp = transform.position;
+        transform.position = target;
+        sprite.position = temp;    
     }
 
     private void UpdateSprite(Vector3 direction)
