@@ -9,6 +9,7 @@ public class LightBulb : Clickable
     public Sprite noBulb;
     public Sprite bulb;
     public GameObject bulbItem;
+    public uint bulbID;
 
     public enum State
     {
@@ -51,7 +52,7 @@ public class LightBulb : Clickable
         //    (!inv.activeHandRight && inv.leftHand != null && inv.leftHand.displayName == "Light Bulb");
         Item activeHand = inv.activeHandRight ? inv.rightHand : inv.leftHand;
 
-        if (state == State.NoBulb && activeHand != null && activeHand.displayName == "Light Bulb")
+        if (state == State.NoBulb && activeHand != null && activeHand.id == bulbID)
         {
             state = State.HasBulb;
             Destroy(inv.RemoveInHand(inv.activeHandRight).gameObject);

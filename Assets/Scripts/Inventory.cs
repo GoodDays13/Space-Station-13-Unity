@@ -44,6 +44,8 @@ public class Inventory : MonoBehaviour
     {
         if (input.actions.FindAction("Switch Hands").WasPressedThisFrame())
             SwitchActiveHand();
+        if (input.actions.FindAction("Drop").WasPressedThisFrame())
+            RemoveInHand(activeHandRight);
     }
 
     /// <summary>

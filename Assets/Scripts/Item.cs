@@ -5,6 +5,7 @@ using UnityEngine;
 public class Item : Clickable
 {
     public string displayName;
+    public uint id;
     public Sprite sprite;
     public Sprite leftHandSprite;
     public Sprite rightHandSprite;
@@ -37,6 +38,8 @@ public class Item : Clickable
             }
 
         }
+
+        GetComponent<Collider2D>().enabled = inv == null;
     }
 
     private void FixedUpdate()
