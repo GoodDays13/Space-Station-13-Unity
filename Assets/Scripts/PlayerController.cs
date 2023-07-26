@@ -11,9 +11,7 @@ public class PlayerController : MonoBehaviour
     public Sprite frontSprite;
     public Sprite backSprite;
     public Sprite sideSprite;
-    public bool moveRight;
-    public bool moveLeft;
-    public bool walking;
+    private bool walking;
     private Transform sprite;
     private PlayerInput input;
     private Vector2 move;
