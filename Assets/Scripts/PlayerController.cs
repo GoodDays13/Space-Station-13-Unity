@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput input;
     private Vector2 move;
     private int lastUsedInput = -1;
+    public AtmosphericSimulation simulation;
 
     // Start is called before the first frame update
     void Start()
@@ -137,6 +138,8 @@ public class PlayerController : MonoBehaviour
             }
             else if (collision.CompareTag("Item"))
                 collision = null;
+            //else if (true)
+            //    collision = null;
         }
 
         if (collision && player == null)
@@ -148,6 +151,8 @@ public class PlayerController : MonoBehaviour
 
         Tilemap tilemap = GameObject.FindGameObjectWithTag("Floor").GetComponent<Tilemap>();
         Vector3Int cell = tilemap.WorldToCell(transform.position + distance);
+        if (simulation)
+            Debug.Log(simulation.GetRoomAtmosphere(new(cell.x, cell.y)) + " " + cell);//IsFloorAtCoords(cell.x, cell.y));
         Vector3 target = tilemap.CellToWorld(cell);
         target.z = 0;
         var temp = transform.position;
