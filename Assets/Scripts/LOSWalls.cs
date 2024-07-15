@@ -39,7 +39,7 @@ public class LOSWalls : MonoBehaviour
             {
                 Vector3Int cellPosition = new(x, y);
                 TileBase tile = walls.GetTile(cellPosition); 
-                if (walls.GetTile(cellPosition) == null)
+                if (walls.GetTile(cellPosition) is null)
                     continue;
 
                 bool blocked = true;
@@ -51,7 +51,7 @@ public class LOSWalls : MonoBehaviour
 
                     RaycastHit2D ray = Physics2D.Raycast(playerPosition, difference, difference.magnitude - 0.1f, wallLayerMask);
 
-                    if (ray.collider == null)
+                    if (ray.collider is null)
                     {
                         blocked = false; break;
                     }

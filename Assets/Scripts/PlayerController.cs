@@ -13,23 +13,25 @@ public class PlayerController : MonoBehaviour
     public Sprite sideSprite;
     private bool walking;
     private Transform sprite;
+    private new SpriteRenderer renderer;
     private PlayerInput input;
     private Vector2 move;
     private int lastUsedInput = -1;
-    public AtmosphericSimulation simulation;
+    private Tilemap floor;
 
     // Start is called before the first frame update
     void Start()
     {
         sprite = transform.GetChild(0);
+        renderer = sprite.GetComponent<SpriteRenderer>();
         input = GetComponent<PlayerInput>();
+        floor = GameObject.FindGameObjectWithTag("Floor").GetComponent<Tilemap>();
     }
 
     private void UpdateInputs()
     {
         var actions = input.actions;
-        bool[] movement = new bool[]
-        {
+        bool[] movement = {
             actions.FindAction("UpLeft").IsPressed(),
             actions.FindAction("Up").IsPressed(),
             actions.FindAction("UpRight").IsPressed(),
@@ -125,8 +127,10 @@ public class PlayerController : MonoBehaviour
     private void Move(Vector2 where, bool ignorePlayers = false)
     {
         Vector3 distance = new(where.x, where.y, 0);
-        Collider2D collision = Physics2D.OverlapPoint(transform.position + distance);
-        PlayerController player = null;
+        Vector3Int cell = floor.WorldToCell(transform.position + distance);
+        Vector3 target = floor.CellToWorld(cell);
+        
+        Collider2D collision = Physics2D.OverlapPoint(target);
 
         if (collision)
         {
@@ -142,18 +146,10 @@ public class PlayerController : MonoBehaviour
             //    collision = null;
         }
 
-        if (collision && player == null)
-        {
-            UpdateSprite(distance);
-            return;
-        }
         UpdateSprite(distance);
+        if (collision)
+            return;
 
-        Tilemap tilemap = GameObject.FindGameObjectWithTag("Floor").GetComponent<Tilemap>();
-        Vector3Int cell = tilemap.WorldToCell(transform.position + distance);
-        if (simulation)
-            Debug.Log(simulation.GetRoomAtmosphere(new(cell.x, cell.y)) + " " + cell);//IsFloorAtCoords(cell.x, cell.y));
-        Vector3 target = tilemap.CellToWorld(cell);
         target.z = 0;
         var temp = transform.position;
         transform.position = target;
@@ -162,7 +158,6 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateSprite(Vector3 direction)
     {
-        var renderer = sprite.GetComponent<SpriteRenderer>();
         renderer.flipX = direction.x < 0;
         if (direction.x != 0)
             renderer.sprite = sideSprite;

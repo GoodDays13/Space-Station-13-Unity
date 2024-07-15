@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Vector2Int = UnityEngine.Vector2Int;
 
 public class AtmosphericSimulation : MonoBehaviour
 {
@@ -101,16 +102,16 @@ public class AtmosphericSimulation : MonoBehaviour
     {
         Vector2Int[] output = new Vector2Int[6];
 
-        output[1] = new(cell.x + 1, cell.y);
-        output[4] = new(cell.x - 1, cell.y);
+        output[1] = new Vector2Int(cell.x + 1, cell.y);
+        output[4] = new Vector2Int(cell.x - 1, cell.y);
 
         if (cell.y % 2 != 0)
             cell.x++;
 
-        output[0] = new(cell.x, cell.y - 1);
-        output[2] = new(cell.x, cell.y + 1);
-        output[3] = new(cell.x - 1, cell.y - 1);
-        output[5] = new(cell.x - 1, cell.y + 1);
+        output[0] = new Vector2Int(cell.x, cell.y - 1);
+        output[2] = new Vector2Int(cell.x, cell.y + 1);
+        output[3] = new Vector2Int(cell.x - 1, cell.y - 1);
+        output[5] = new Vector2Int(cell.x - 1, cell.y + 1);
 
 
         return output;
@@ -208,7 +209,7 @@ public class AtmosphericSimulation : MonoBehaviour
             this.temperature = temperature;
         }
 
-        public override readonly string ToString()
+        public readonly override string ToString()
         {
             return $"{moles} moles, {volume} Liters, {temperature} K, {Pressure} atm";
         }
